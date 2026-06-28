@@ -81,6 +81,18 @@ function clearDownstream(roundIndex, matchIndex) {
   }
 }
 
+function renderPreservingPosition() {
+  const wrap = document.querySelector('.bracket-wrap');
+  const scrollLeft = wrap ? wrap.scrollLeft : 0;
+  const scrollTop = window.scrollY;
+  render();
+  requestAnimationFrame(() => {
+    const nextWrap = document.querySelector('.bracket-wrap');
+    if (nextWrap) nextWrap.scrollLeft = scrollLeft;
+    window.scrollTo({ top: scrollTop, left: 0, behavior: 'instant' });
+  });
+}
+
 function choose(roundIndex, matchIndex, team) {
   const key = matchKey(roundIndex, matchIndex);
   const current = state.picks[key];
@@ -91,7 +103,7 @@ function choose(roundIndex, matchIndex, team) {
     state.picks[key] = team.name;
   }
   saveState();
-  render();
+  renderPreservingPosition();
 }
 
 function undoTeam(teamName) {
@@ -103,7 +115,7 @@ function undoTeam(teamName) {
         clearDownstream(r, i);
         delete state.picks[key];
         saveState();
-        render();
+        renderPreservingPosition();
         return;
       }
     }
@@ -123,8 +135,8 @@ function clearAll() {
 }
 
 function teamButton(team, selected, onClick, disabled) {
-  if (!team) return `<button class="team empty" disabled><span>A definir</span></button>`;
-  return `<button class="team ${selected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} data-team="${team.name}" draggable="true" title="Clique para escolher; clique de novo ou arraste para voltar">
+  if (!team) return `<button type="button" class="team empty" disabled><span>A definir</span></button>`;
+  return `<button type="button" class="team ${selected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} data-team="${team.name}" draggable="true" title="Clique para escolher; clique de novo ou arraste para voltar">
     ${team.code ? `<img src="${flag(team.code)}" alt="${team.name}" loading="lazy" />` : ''}
     <span>${team.name}</span>
   </button>`;
