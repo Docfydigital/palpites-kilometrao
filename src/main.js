@@ -32,6 +32,7 @@ const presets = {
 
 const rounds = [16, 8, 4, 2, 1];
 let state = loadState();
+let didInitialScroll = false;
 
 function defaultState() {
   return { picks: {} };
@@ -375,3 +376,10 @@ async function downloadImage() {
 }
 
 render();
+requestAnimationFrame(() => {
+  const wrap = document.querySelector('.bracket-wrap');
+  if (wrap && !didInitialScroll) {
+    wrap.scrollLeft = 0;
+    didInitialScroll = true;
+  }
+});

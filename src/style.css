@@ -111,11 +111,14 @@ button {
 .bracket-wrap {
   border-radius: 34px;
   padding: 20px;
+  scroll-padding-left: 22px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 .bracket {
+  margin-left: 18px;
+  margin-right: 18px;
   min-width: 1540px;
   min-height: 920px;
   display: grid;
@@ -137,10 +140,10 @@ button {
   align-content: start;
 }
 .round.r0 { grid-template-rows: 32px repeat(8, 84px); row-gap: 14px; }
-.round.r1 { grid-template-rows: 32px repeat(4, 84px); row-gap: 112px; padding-top: 49px; }
-.round.r2 { grid-template-rows: 32px repeat(2, 84px); row-gap: 308px; padding-top: 147px; }
-.round.r3 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 343px; }
-.round.r4 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 343px; }
+.round.r1 { grid-template-rows: 32px repeat(4, 84px); row-gap: 112px; padding-top: 0; }
+.round.r2 { grid-template-rows: 32px repeat(2, 84px); row-gap: 308px; padding-top: 0; }
+.round.r3 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 0; }
+.round.r4 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 0; }
 .round-title {
   position: sticky;
   top: 0;
@@ -156,6 +159,12 @@ button {
   letter-spacing: .12em;
   font-weight: 850;
 }
+
+.round.r1 .match { transform: translateY(48px); }
+.round.r2 .match { transform: translateY(147px); }
+.round.r3 .match,
+.round.r4 .match { transform: translateY(343px); }
+
 .match {
   height: 84px;
   min-height: 84px;
@@ -259,8 +268,8 @@ button {
   .actions { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); }
   .actions button { padding: 11px 8px; font-size: 10px; }
   .champion { margin: 10px 0; border-radius: 22px; justify-content: flex-start; }
-  .bracket-wrap { padding: 12px; border-radius: 24px; }
-  .bracket { min-width: 1420px; min-height: 920px; }
+  .bracket-wrap { padding: 12px 18px 12px 18px; border-radius: 24px; }
+  .bracket { min-width: 1420px; min-height: 920px; margin-left: 28px; margin-right: 28px; }
   .side { grid-template-columns: 215px 198px 178px 160px; gap: 12px; }
   .team { font-size: 13px; }
 }
