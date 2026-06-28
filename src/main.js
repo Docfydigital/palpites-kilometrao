@@ -1,6 +1,8 @@
 import './style.css';
+import { toPng } from 'html-to-image';
 
 const flag = (code) => `https://flagcdn.com/w80/${code}.png`;
+const sideRoundIndexes = [0, 1, 2, 3];
 
 const initialMatches = [
   { id: 'm1', side: 'left', a: ['Alemanha', 'de'], b: ['Paraguai', 'py'] },
@@ -85,7 +87,40 @@ function renderPreservingPosition() {
   const wrap = document.querySelector('.bracket-wrap');
   const scrollLeft = wrap ? wrap.scrollLeft : 0;
   const scrollTop = window.scrollY;
-  render();
+  async function downloadImage() {
+  const node = document.querySelector('#bracket-capture');
+  const button = document.querySelector('#download');
+  if (!node || !button) return;
+  const oldText = button.textContent;
+  button.textContent = 'gerando...';
+  button.disabled = true;
+  try {
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: '#06150d',
+      width: node.scrollWidth,
+      height: node.scrollHeight,
+      style: {
+        transform: 'none',
+        width: `${node.scrollWidth}px`,
+        height: `${node.scrollHeight}px`,
+      },
+    });
+    const link = document.createElement('a');
+    link.download = `palpites-do-kilometrao-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+  } catch (error) {
+    alert('Não consegui gerar a imagem neste navegador. Tente pelo Chrome ou tire print da chave.');
+    console.error(error);
+  } finally {
+    button.textContent = oldText;
+    button.disabled = false;
+  }
+}
+
+render();
   requestAnimationFrame(() => {
     const nextWrap = document.querySelector('.bracket-wrap');
     if (nextWrap) nextWrap.scrollLeft = scrollLeft;
@@ -125,19 +160,85 @@ function undoTeam(teamName) {
 function reset() {
   state = presetState();
   saveState();
-  render();
+  async function downloadImage() {
+  const node = document.querySelector('#bracket-capture');
+  const button = document.querySelector('#download');
+  if (!node || !button) return;
+  const oldText = button.textContent;
+  button.textContent = 'gerando...';
+  button.disabled = true;
+  try {
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: '#06150d',
+      width: node.scrollWidth,
+      height: node.scrollHeight,
+      style: {
+        transform: 'none',
+        width: `${node.scrollWidth}px`,
+        height: `${node.scrollHeight}px`,
+      },
+    });
+    const link = document.createElement('a');
+    link.download = `palpites-do-kilometrao-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+  } catch (error) {
+    alert('Não consegui gerar a imagem neste navegador. Tente pelo Chrome ou tire print da chave.');
+    console.error(error);
+  } finally {
+    button.textContent = oldText;
+    button.disabled = false;
+  }
+}
+
+render();
 }
 
 function clearAll() {
   state = { picks: {} };
   saveState();
-  render();
+  async function downloadImage() {
+  const node = document.querySelector('#bracket-capture');
+  const button = document.querySelector('#download');
+  if (!node || !button) return;
+  const oldText = button.textContent;
+  button.textContent = 'gerando...';
+  button.disabled = true;
+  try {
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: '#06150d',
+      width: node.scrollWidth,
+      height: node.scrollHeight,
+      style: {
+        transform: 'none',
+        width: `${node.scrollWidth}px`,
+        height: `${node.scrollHeight}px`,
+      },
+    });
+    const link = document.createElement('a');
+    link.download = `palpites-do-kilometrao-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+  } catch (error) {
+    alert('Não consegui gerar a imagem neste navegador. Tente pelo Chrome ou tire print da chave.');
+    console.error(error);
+  } finally {
+    button.textContent = oldText;
+    button.disabled = false;
+  }
+}
+
+render();
 }
 
 function teamButton(team, selected, onClick, disabled) {
   if (!team) return `<button type="button" class="team empty" disabled><span>A definir</span></button>`;
   return `<button type="button" class="team ${selected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} data-team="${team.name}" draggable="true" title="Clique para escolher; clique de novo ou arraste para voltar">
-    ${team.code ? `<img src="${flag(team.code)}" alt="${team.name}" loading="lazy" />` : ''}
+    ${team.code ? `<img src="${flag(team.code)}" alt="${team.name}" loading="lazy" crossorigin="anonymous" />` : ''}
     <span>${team.name}</span>
   </button>`;
 }
@@ -162,19 +263,20 @@ function champion() {
 function render() {
   const app = document.querySelector('#app');
   const champ = champion();
-  const leftRounds = [0,1,2,3,4].map(i => getRoundMatches(i).slice(0, Math.ceil(getRoundMatches(i).length / 2)));
-  const rightRounds = [0,1,2,3,4].map(i => getRoundMatches(i).slice(Math.ceil(getRoundMatches(i).length / 2)));
+  const leftRounds = sideRoundIndexes.map(i => getRoundMatches(i).slice(0, Math.ceil(getRoundMatches(i).length / 2)));
+  const rightRounds = sideRoundIndexes.map(i => getRoundMatches(i).slice(Math.ceil(getRoundMatches(i).length / 2)));
+  const finalMatch = getRoundMatches(4)[0];
   app.innerHTML = `
     <main class="shell">
       <header class="hero glass">
         <div>
           <p class="eyebrow">Copa do Mundo • simulador de chave</p>
           <h1>Palpites do Kilometrão</h1>
-          <p class="subtitle">Clique nos vencedores. Se errar, clique de novo ou arraste o país de volta para a chave.</p>
+          <p class="subtitle">Clique nos vencedores. Se errar, clique de novo ou arraste o país de volta para a chave. No fim, baixe a imagem completa.</p>
         </div>
         <div class="actions no-print">
           <button id="clear">zerar</button>
-          <button id="print">print</button>
+          <button id="download">baixar imagem</button>
         </div>
       </header>
 
@@ -189,9 +291,14 @@ function render() {
       <section class="mobile-hint no-print">Arraste para o lado para navegar pela chave completa.</section>
 
       <section class="bracket-wrap glass">
-        <div class="bracket">
+        <div class="bracket" id="bracket-capture">
           ${renderSide(leftRounds, 'left')}
-          <div class="center-line"><div></div></div>
+          <div class="final-column">
+            <div class="round-title">Final</div>
+            ${renderMatch(finalMatch, 4, 0)}
+            <div class="final-trophy">🏆</div>
+            <div class="final-winner">${champ || 'Campeão a definir'}</div>
+          </div>
           ${renderSide(rightRounds, 'right')}
         </div>
       </section>
@@ -218,7 +325,7 @@ function render() {
     };
   });
   document.querySelector('#clear').onclick = clearAll;
-  document.querySelector('#print').onclick = () => window.print();
+  document.querySelector('#download').onclick = downloadImage;
 }
 
 function renderSide(roundsData, side) {
@@ -232,6 +339,39 @@ function renderSide(roundsData, side) {
       </div>`;
     }).join('')}
   </div>`;
+}
+
+async function downloadImage() {
+  const node = document.querySelector('#bracket-capture');
+  const button = document.querySelector('#download');
+  if (!node || !button) return;
+  const oldText = button.textContent;
+  button.textContent = 'gerando...';
+  button.disabled = true;
+  try {
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: '#06150d',
+      width: node.scrollWidth,
+      height: node.scrollHeight,
+      style: {
+        transform: 'none',
+        width: `${node.scrollWidth}px`,
+        height: `${node.scrollHeight}px`,
+      },
+    });
+    const link = document.createElement('a');
+    link.download = `palpites-do-kilometrao-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+  } catch (error) {
+    alert('Não consegui gerar a imagem neste navegador. Tente pelo Chrome ou tire print da chave.');
+    console.error(error);
+  } finally {
+    button.textContent = oldText;
+    button.disabled = false;
+  }
 }
 
 render();

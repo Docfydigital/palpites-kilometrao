@@ -119,13 +119,13 @@ button {
   min-width: 1540px;
   min-height: 920px;
   display: grid;
-  grid-template-columns: 1fr 80px 1fr;
+  grid-template-columns: 1fr 230px 1fr;
   gap: 10px;
   position: relative;
 }
 .side {
   display: grid;
-  grid-template-columns: 230px 210px 190px 170px 150px;
+  grid-template-columns: 230px 210px 190px 170px;
   gap: 18px;
   align-items: start;
 }
@@ -214,16 +214,42 @@ button {
   cursor: default;
 }
 .team:disabled { opacity: .55; cursor: not-allowed; }
-.center-line {
+.final-column {
+  align-self: stretch;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  gap: 18px;
+  padding: 0 10px;
+  position: relative;
 }
-.center-line > div {
-  width: 2px;
-  height: 76%;
-  border-radius: 99px;
-  background: linear-gradient(transparent, rgba(255,255,255,.38), transparent);
+.final-column::before,
+.final-column::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 1px;
+  background: rgba(255,255,255,.55);
+}
+.final-column::before { left: -18px; }
+.final-column::after { right: -18px; }
+.final-column .match { min-height: 84px; }
+.final-column .match::after { display: none; }
+.final-trophy {
+  text-align: center;
+  font-size: 64px;
+  filter: drop-shadow(0 16px 28px rgba(255,196,56,.32));
+}
+.final-winner {
+  text-align: center;
+  padding: 14px 12px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,216,92,.98), rgba(255,154,61,.94));
+  color: #1d1400;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  box-shadow: 0 18px 40px rgba(255,172,51,.22);
 }
 
 @media (max-width: 760px) {
@@ -234,7 +260,7 @@ button {
   .champion { margin: 10px 0; border-radius: 22px; justify-content: flex-start; }
   .bracket-wrap { padding: 12px; border-radius: 24px; }
   .bracket { min-width: 1420px; min-height: 920px; }
-  .side { grid-template-columns: 215px 198px 178px 160px 140px; gap: 12px; }
+  .side { grid-template-columns: 215px 198px 178px 160px; gap: 12px; }
   .team { font-size: 13px; }
 }
 
