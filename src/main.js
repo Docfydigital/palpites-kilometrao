@@ -161,7 +161,6 @@ function render() {
           <p class="subtitle">Clique nos vencedores. Se errar, clique de novo ou arraste o país de volta para a chave.</p>
         </div>
         <div class="actions no-print">
-          <button id="preset">base Filipe</button>
           <button id="clear">zerar</button>
           <button id="print">print</button>
         </div>
@@ -206,7 +205,6 @@ function render() {
       if (teamName && (card.dataset.a === teamName || card.dataset.b === teamName)) undoTeam(teamName);
     };
   });
-  document.querySelector('#preset').onclick = reset;
   document.querySelector('#clear').onclick = clearAll;
   document.querySelector('#print').onclick = () => window.print();
 }
