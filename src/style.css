@@ -117,7 +117,7 @@ button {
 }
 .bracket {
   min-width: 1540px;
-  min-height: 890px;
+  min-height: 920px;
   display: grid;
   grid-template-columns: 1fr 80px 1fr;
   gap: 10px;
@@ -127,17 +127,20 @@ button {
   display: grid;
   grid-template-columns: 230px 210px 190px 170px 150px;
   gap: 18px;
-  align-items: stretch;
+  align-items: start;
 }
 .side.right { direction: rtl; }
 .side.right * { direction: ltr; }
 .round {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 14px;
+  display: grid;
   position: relative;
+  align-content: start;
 }
+.round.r0 { grid-template-rows: 32px repeat(8, 84px); row-gap: 14px; }
+.round.r1 { grid-template-rows: 32px repeat(4, 182px); row-gap: 14px; padding-top: 49px; }
+.round.r2 { grid-template-rows: 32px repeat(2, 378px); row-gap: 14px; padding-top: 147px; }
+.round.r3 { grid-template-rows: 32px repeat(1, 770px); row-gap: 14px; padding-top: 343px; }
+.round.r4 { grid-template-rows: 32px repeat(1, 770px); row-gap: 14px; padding-top: 343px; }
 .round-title {
   position: sticky;
   top: 0;
@@ -230,7 +233,7 @@ button {
   .actions button { padding: 11px 8px; font-size: 10px; }
   .champion { margin: 10px 0; border-radius: 22px; justify-content: flex-start; }
   .bracket-wrap { padding: 12px; border-radius: 24px; }
-  .bracket { min-width: 1420px; min-height: 820px; }
+  .bracket { min-width: 1420px; min-height: 920px; }
   .side { grid-template-columns: 215px 198px 178px 160px 140px; gap: 12px; }
   .team { font-size: 13px; }
 }
