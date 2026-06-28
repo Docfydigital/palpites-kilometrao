@@ -137,10 +137,10 @@ button {
   align-content: start;
 }
 .round.r0 { grid-template-rows: 32px repeat(8, 84px); row-gap: 14px; }
-.round.r1 { grid-template-rows: 32px repeat(4, 182px); row-gap: 14px; padding-top: 49px; }
-.round.r2 { grid-template-rows: 32px repeat(2, 378px); row-gap: 14px; padding-top: 147px; }
-.round.r3 { grid-template-rows: 32px repeat(1, 770px); row-gap: 14px; padding-top: 343px; }
-.round.r4 { grid-template-rows: 32px repeat(1, 770px); row-gap: 14px; padding-top: 343px; }
+.round.r1 { grid-template-rows: 32px repeat(4, 84px); row-gap: 112px; padding-top: 49px; }
+.round.r2 { grid-template-rows: 32px repeat(2, 84px); row-gap: 308px; padding-top: 147px; }
+.round.r3 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 343px; }
+.round.r4 { grid-template-rows: 32px repeat(1, 84px); row-gap: 14px; padding-top: 343px; }
 .round-title {
   position: sticky;
   top: 0;
@@ -157,6 +157,7 @@ button {
   font-weight: 850;
 }
 .match {
+  height: 84px;
   min-height: 84px;
   padding: 8px;
   border-radius: 18px;
@@ -234,7 +235,7 @@ button {
 }
 .final-column::before { left: -18px; }
 .final-column::after { right: -18px; }
-.final-column .match { min-height: 84px; }
+.final-column .match { height: 84px; min-height: 84px; }
 .final-column .match::after { display: none; }
 .final-trophy {
   text-align: center;
