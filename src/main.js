@@ -80,7 +80,7 @@ function yPositions(count) {
   if (count === 8) return [88, 210, 332, 454, 576, 698, 820, 942];
   if (count === 4) return [149, 393, 637, 881];
   if (count === 2) return [271, 759];
-  return [515];
+  return [420];
 }
 
 function layoutNodes() {
@@ -95,7 +95,7 @@ function layoutNodes() {
     for (let i = 0; i < half; i++) nodes.push({ r, i, x: leftX[r], y: ys[i], match: matches[i], side: 'left' });
     for (let i = half; i < matches.length; i++) nodes.push({ r, i, x: rightX[r], y: ys[i - half], match: matches[i], side: 'right' });
   }
-  nodes.push({ r: 4, i: 0, x: 798, y: 450, match: getRoundMatches(4)[0], side: 'final' });
+  nodes.push({ r: 4, i: 0, x: 798, y: 540, match: getRoundMatches(4)[0], side: 'final' });
   return nodes;
 }
 function findNode(nodes, r, i) { return nodes.find(n => n.r === r && n.i === i); }

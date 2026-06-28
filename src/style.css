@@ -150,7 +150,7 @@ button { border: 0; color: inherit; font: inherit; cursor: pointer; }
   position: absolute;
   z-index: 2;
   left: 890px;
-  top: 565px;
+  top: 660px;
   transform: translateX(-50%);
   font-size: 64px;
   filter: drop-shadow(0 16px 28px rgba(255,196,56,.32));
@@ -159,7 +159,7 @@ button { border: 0; color: inherit; font: inherit; cursor: pointer; }
   position: absolute;
   z-index: 2;
   left: 890px;
-  top: 650px;
+  top: 745px;
   transform: translateX(-50%);
   width: 250px;
   text-align: center;
