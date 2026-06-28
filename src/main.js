@@ -32,6 +32,10 @@ const rounds = [16, 8, 4, 2, 1];
 let state = loadState();
 
 function defaultState() {
+  return { picks: {} };
+}
+
+function presetState() {
   return { picks: { ...presets } };
 }
 
@@ -79,15 +83,35 @@ function clearDownstream(roundIndex, matchIndex) {
 
 function choose(roundIndex, matchIndex, team) {
   const key = matchKey(roundIndex, matchIndex);
-  state.picks[key] = team.name;
+  const current = state.picks[key];
   clearDownstream(roundIndex, matchIndex);
-  state.picks[key] = team.name;
+  if (current === team.name) {
+    delete state.picks[key];
+  } else {
+    state.picks[key] = team.name;
+  }
   saveState();
   render();
 }
 
+function undoTeam(teamName) {
+  for (let r = 0; r < rounds.length; r++) {
+    const count = rounds[r];
+    for (let i = 0; i < count; i++) {
+      const key = matchKey(r, i);
+      if (state.picks[key] === teamName) {
+        clearDownstream(r, i);
+        delete state.picks[key];
+        saveState();
+        render();
+        return;
+      }
+    }
+  }
+}
+
 function reset() {
-  state = defaultState();
+  state = presetState();
   saveState();
   render();
 }
@@ -100,7 +124,7 @@ function clearAll() {
 
 function teamButton(team, selected, onClick, disabled) {
   if (!team) return `<button class="team empty" disabled><span>A definir</span></button>`;
-  return `<button class="team ${selected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} data-team="${team.name}">
+  return `<button class="team ${selected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} data-team="${team.name}" draggable="true" title="Clique para escolher; clique de novo ou arraste para voltar">
     ${team.code ? `<img src="${flag(team.code)}" alt="${team.name}" loading="lazy" />` : ''}
     <span>${team.name}</span>
   </button>`;
@@ -109,7 +133,7 @@ function teamButton(team, selected, onClick, disabled) {
 function renderMatch(match, roundIndex, matchIndex) {
   const picked = state.picks[matchKey(roundIndex, matchIndex)];
   const disabled = !match.a || !match.b;
-  return `<article class="match" data-round="${roundIndex}" data-index="${matchIndex}">
+  return `<article class="match" data-round="${roundIndex}" data-index="${matchIndex}" data-a="${match.a?.name || ''}" data-b="${match.b?.name || ''}">
     ${teamButton(match.a, picked === match.a?.name, null, disabled)}
     ${teamButton(match.b, picked === match.b?.name, null, disabled)}
   </article>`;
@@ -134,11 +158,11 @@ function render() {
         <div>
           <p class="eyebrow">Copa do Mundo • simulador de chave</p>
           <h1>Palpites do Kilometrão</h1>
-          <p class="subtitle">Clique nos vencedores, avance até a final e tire print da chave.</p>
+          <p class="subtitle">Clique nos vencedores. Se errar, clique de novo ou arraste o país de volta para a chave.</p>
         </div>
         <div class="actions no-print">
           <button id="preset">base Filipe</button>
-          <button id="clear">limpar</button>
+          <button id="clear">zerar</button>
           <button id="print">print</button>
         </div>
       </header>
@@ -167,7 +191,20 @@ function render() {
     const idx = Number(card.dataset.index);
     card.querySelectorAll('.team:not(.empty)').forEach(btn => {
       btn.onclick = () => choose(r, idx, teamObj(btn.dataset.team));
+      btn.ondragstart = (event) => {
+        event.dataTransfer.setData('text/plain', btn.dataset.team);
+        event.dataTransfer.effectAllowed = 'move';
+      };
     });
+    card.ondragover = (event) => {
+      const team = event.dataTransfer.types.includes('text/plain');
+      if (team) event.preventDefault();
+    };
+    card.ondrop = (event) => {
+      event.preventDefault();
+      const teamName = event.dataTransfer.getData('text/plain');
+      if (teamName && (card.dataset.a === teamName || card.dataset.b === teamName)) undoTeam(teamName);
+    };
   });
   document.querySelector('#preset').onclick = reset;
   document.querySelector('#clear').onclick = clearAll;
