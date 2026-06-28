@@ -85,8 +85,8 @@ function yPositions(count) {
 
 function layoutNodes() {
   const nodes = [];
-  const leftX = [32, 262, 492, 652];
-  const rightX = [1564, 1334, 1104, 944];
+  const leftX = [32, 262, 492, 570];
+  const rightX = [1564, 1334, 1104, 1026];
 
   for (let r = 0; r < 4; r++) {
     const matches = getRoundMatches(r);
@@ -109,6 +109,14 @@ function pathBetween(a, b) {
   const bc = center(b);
   const ax = edgeX(a, 'out');
   const bx = edgeX(b, 'in');
+
+  if (b.side === 'final') {
+    const entryX = a.side === 'left' ? b.x - 22 : b.x + BOX.w + 22;
+    const finalY = a.side === 'left' ? b.y + 22 : b.y + BOX.h - 22;
+    const finalX = a.side === 'left' ? b.x : b.x + BOX.w;
+    return `M ${ax} ${ac.y} H ${entryX} V ${finalY} H ${finalX}`;
+  }
+
   const mid = (ax + bx) / 2;
   return `M ${ax} ${ac.y} H ${mid} V ${bc.y} H ${bx}`;
 }
